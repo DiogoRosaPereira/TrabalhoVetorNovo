@@ -1,265 +1,211 @@
-import java.time.DateTimeException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Empresa {
 	
-	private static Funcionario []funcionario = new Funcionario[4];
-	private static int NumeroFuncionario = 0;
+	static Scanner n = new Scanner(System.in);
 	
-	private static Scanner n = new Scanner (System.in);
+	private Metodos<Funcionario> funcionarios = new Metodos<>();
+	private Metodos<Projeto> projetos = new Metodos<>();
 	
-	private static Projeto []projeto = new Projeto[4];
-	private static int NumeroProjeto=0;
+	private static Funcionario[] funcionario = new Funcionario[4];
 
-	private static int opcao;
-	
-	
 	public static void main(String[] args) {
+		try {
+			(new Empresa()).run();
+		} catch (FileNotFoundException e) {
+			System.err.println("Nao encontrei o arquivo.");
+			System.err.println(e.getMessage());
+		}
+	}
+
+	private void run() throws FileNotFoundException {
+		leituraDeFuncionarios();
+		leituraDeProjetos();
+		
+		menuPrincipal();
+	}
+	
+	private void leituraDeFuncionarios() throws FileNotFoundException {
+		CSVReader<Funcionario> arquivo = new CSVReader<>("funcionarios.csv", new FuncionarioParser());
+		
+		arquivo.skipLine();
+		
+		while (arquivo.hasNext()) {
+			funcionarios.append(arquivo.readObject());
+		}		
+		
+		arquivo.close();
+	}
+	
+	private void leituraDeProjetos() throws FileNotFoundException {
+		CSVReader<Projeto> arquivo = new CSVReader<>("projetos.csv", new ProjetoParser());
+		
+		arquivo.skipLine();
+
+		while (arquivo.hasNext()) {
+			projetos.append(arquivo.readObject());
+		}
+		
+		arquivo.close();
+	}
+	
+	private void menuPrincipal() {
+		System.out.println();
+		System.out.println("===== ** =====");
+		System.out.println();
+		System.out.println("Menu principal:");
+		System.out.println("1 - Funcionarios");
+		System.out.println("2 - Projetos");
+		System.out.println("3 - Competencias");
+		
+		System.out.println();
+		System.out.print("Digite o numero de menu desejado: ");
+		
+		String escolhaMenu = n.nextLine();
+		
+		switch (escolhaMenu) {
+			case "1":
+					menuFuncionarios();
+				break;
+			case "2":
+					//menuProjetos();
+				break;
+			case "3":
+					//menuCompetencias();
+				break;
+			default:
+					System.out.println();
+					System.out.println("Escolha invalida.");
+					menuPrincipal();
+				break;
+		}
+	}
+	
+	private void menuFuncionarios() {
+		System.out.println();
+		System.out.println("===== ** =====");
+		System.out.println();
+		System.out.println("Menu de funcionarios:");
+		System.out.println("1 - Cadastrar novo funcionario");
+		System.out.println("2 - Listar funcionarios");
+		System.out.println("3 - Excluir funcionario");
+		
+		System.out.println("4 - Voltar");
+		
+		System.out.println();
+		System.out.print("Digite o numero de menu desejado: ");
+		
+		String opcao = n.nextLine();
+		
+		switch (opcao) {
+			case "1":
+					adicionarFuncionario();
+				break;
+			case "2":
+					listarFuncionarios(0);
+					menuFuncionarios();
+				break;
+			case "3":
+					menuExcluirFuncionario();
+				break;
+			case "4":
+					menuPrincipal();
+				break;
+			default:
+					System.out.println("Escolha invalida.");
+				break;
+		}
+	}
+	
+	private void listarFuncionarios(int index) {
 		
 		
-		do{
+	}
+
+	private void menuExcluirFuncionario() {
+		System.out.println("1 = adicionar funcionario: ");
+		System.out.println("2 = listar funcionarios: ");
+		System.out.println("3 = excluir funcionario: ");
+		System.out.println("Escolha um funcionario para ser excluido:");
+		System.out.println("0 - Voltar");
+		
+		System.out.println();
+		
+		//listarFuncionarios(1);
+		
+		System.out.println();
+		
+		System.out.print("Digite o numero do funcionario desejado:");
+		
+		String escolhaMenu = n.nextLine();
+		
+		switch (escolhaMenu) {
+			case "0":
+					menuFuncionarios();
+				break;
+			default:
+					excluirFuncionario(Integer.parseInt(escolhaMenu) - 1);
+				break;
+		}
+	}
+	
+	private void excluirFuncionario(int index) {
+		System.out.println();
+		System.out.println("===== ** =====");
+		System.out.println();
+		
+		try {
+			funcionarios.remove(index);
 			
-            menu();
-            
-            opcao = n.nextInt();
-            
-            switch(opcao){
-            case 1:
-            	cadastraFuncionario();
-                break;
-                
-            case 2:
-            	addCompetenciaFuncionario(NumeroFuncionario);
-                break;
-                
-            case 3:
-            	removerFuncionario();
-                break;
-                
-            case 4:
-            	cadastrarProjeto();
-                break;
-            case 5:
-            	addCompetenciaProjeto(NumeroProjeto);
-                break;
-            case 6:
-            	imprimeProjetos();
-            case 7:
-            	removerProjetos();
-            default:
-                System.out.println("Opção inválida.");
-            }
-            
-        } while(opcao != 0);
-    }
+			System.out.println("Funcionario removido com sucesso!");
+		} catch(Exception e) {			
+			System.out.println("Erro ao remover o funcionario. Tente novamente.");
+			System.out.println("Erro: " + e);
+		}
 		
-	private static void menu(){
-		
-		System.out.println("1 = cadastrar funcionario");
-		System.out.println("2 = adicionar competencia a funcionario");
-		System.out.println("3 = remover funcionario");
-		System.out.println("4 = cadastra projeto");
-		System.out.println("5 = adicionar competencia a projeto");
-		System.out.println("6 = consultar projetos ativos");
-		System.out.println("7 = remover projetos");
-		System.out.println("Opção: ");
-		
-		
-	}	
-	
-	private static void addCompetenciaProjeto(int index) {
-		imprimeProjetos();
-		System.out.println("Favor entrar com o numero do projeto: ");
-		testaindexProjetos(index);
-		int index1 = n.nextInt();
-		
-		System.out.println("competencia. ");
-		String competenciaProj = n.next();
-		projeto[index1].setCompetencia(competenciaProj);
-		
-		System.out.println(projeto[index1]);
-		
-		
+		menuFuncionarios();
 	}
+	
+	/*private void listarFuncionarios(int index) {				
+		for (int i = 0; i < funcionarios.size(); i++) {
+			funcionarios.get(i).mostrarInformacoes(i, index);
+		}
+	}
+	
+	private void listarFuncionarios() {
+		listarFuncionarios(1);
+	}*/
+	
+	private void adicionarFuncionario() {
+		int index = 0;
+		
+		System.out.println("Adicionar funcionario:\n");	
+		
+		System.out.print("Nome: ");
+		String nome = n.nextLine();
 
-	private static void testaindexProjetos(int index) {
-		if(index < 0 || index >= funcionario.length){
-			throw new ArrayIndexOutOfBoundsException(index);
-		} 
+		System.out.print("Salario: ");
+		String salario = n.nextLine();
 		
-	}
-
-	private static void imprimeProjetos() {
-		for (int i = 0; i < projeto.length; i++) {
-			if(projeto[i] != null)
-			System.out.println("Projeto "+i + " = "+projeto[i].getNome()+"\n");
-		}
+		System.out.print("Numero de competencias: ");
+		int num_competencias = Integer.parseInt(n.nextLine());
 		
-	}
-	
-	private static void removerProjetos() {
-		imprimeProjetos();
-		System.out.println("digite o numero do Projeto: ");
-		int index = n.nextInt();
-		testaIndexProjetos(index);
-			for(int i=index; i<projeto.length-1; i++ ){
-				projeto[i] = projeto[i+1];
-			}
-		imprimeProjetos();
-		NumeroProjeto--;
+		String[] competencias = new String[num_competencias];
 		
-	}
-	
-	private static void testaIndexProjetos(int index) {
-		if(index < 0 || index >= NumeroProjeto){
-			throw new ArrayIndexOutOfBoundsException(index);
-		} 
-		
-	}
-
-	private static void cadastrarProjeto() {
-		Projeto proj = new Projeto();
-		testaVetorProjetos();
-		System.out.print("nome do projeto:");
-		String nome = n.next();
-		proj.setNome(nome);
-		try{
-		System.out.println("digite data inicio no formato (dd/mm/yyyy):");
-		String dataIncio = n.next();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate date = LocalDate.parse(dataIncio, formatter);
-		if(date.equals(LocalDate.now())){
-			proj.setDataInicio(date);
-		}
-		if(date.isAfter (date) ){
-			System.out.println("Favor inserir data valida. ");
-			cadastrarProjeto();
-		}else{
-			proj.setDataInicio(date);
-		}
-		System.out.println("digite data final no formato (dd/mm/yyyy):");
-		String dataFim = n.next();
-		DateTimeFormatter formatter1 = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate date1 = LocalDate.parse(dataFim, formatter1);
-		if(date1.equals(LocalDate.now())){
-			proj.setDataFim(date1);
-		}
-		if(date1.isAfter (date1) ){
-			System.out.println("Favor inserir data valida. ");
-			cadastrarProjeto();
-		}else{
-			proj.setDataFim(date1);
-		}
-		}catch(DateTimeException erro){
-			System.err.print("\nerro no formato da data preenchida: \n");
-			cadastrarProjeto();
-		}
-		
-		System.out.println("digite competencia: ");
-		String competenciaProj = n.next();
-		proj.setCompetencia(competenciaProj);
-		
-		projeto[NumeroProjeto] = proj;
-		System.out.println(projeto[NumeroProjeto]);
-		NumeroProjeto++;
-	}
-	
-	private static void testaVetorProjetos() {
-		if (NumeroProjeto >= projeto.length){
-			Projeto[] projetoNovo = new Projeto [projeto.length*2];
-			for(int i = 0; i<projeto.length;i++ ){
-				projetoNovo[i] = projeto[i];
-			}
-			projeto = projetoNovo;
-	
-		}
-	}
-	
-	private static void addCompetenciaFuncionario(int index) { 
-		imprimirFuncionario();
-		System.out.println("\ndigite numero do funcionario ");
-		index = n.nextInt();
-		testaNumFunc(index);
-		
-		System.out.println("digite competencia. ");
-		String compFunc = n.next();
-		funcionario[index].setCompetencia(compFunc);
-		
-		
-		System.out.println(funcionario[index]);
-		
-	}
-	
-	private static void testaNumFunc(int index) {
-		if(index < 0 || index >= NumeroFuncionario){
-			throw new ArrayIndexOutOfBoundsException(index);
-		} 
-		
-	}
-
-	private static void removerFuncionario() {
-		imprimirFuncionario();
-		
-		System.out.println("digite o numero do funcionario: ");
-		int index = n.nextInt();
-		testaNumFunc(index);
-			for(int i=index; i<funcionario.length-1; i++ ){
-				funcionario[i] = funcionario[i+1];
+		while(index < num_competencias) {
+			System.out.print("Competencia " + (index + 1) + ": ");
+			competencias[index] = n.nextLine();
 			
-			}
-			System.out.println("Favor insirir funcionario valido. ");
-		
-		NumeroFuncionario--;
-	}
-	
-	private static void imprimirFuncionario() {
-		for (int i = 0; i < funcionario.length; i++) {
-			if(funcionario[i] != null){
-				System.out.println("funcionario "+i+" = "+funcionario[i].getNome());
-			}
+			index++;
 		}
 		
+		funcionarios.append(new Funcionario(nome, salario, num_competencias, competencias));
+		
+		System.out.println();
+		System.out.println("Funcionario " + nome + " adicionado com sucesso!");
+		
+		// Volta para o menu de funcionarios
+		menuFuncionarios();
 	}
-
-	private static void cadastraFuncionario() {
-		testaVetorFunc();
-		Funcionario empregado = new Funcionario();
-		System.out.println("Nome funcionario. ");
-		String nomeFunc = n.next();
-		empregado.setNome(nomeFunc);
-	
-		System.out.println("salario do funcionario. ");
-		double salarioFunc = n.nextDouble();
-		empregado.setSalario(salarioFunc);
-	
-		System.out.println("digite competencia: ");
-		String compFunc = n.next();
-		empregado.setCompetencia(compFunc);
-		
-		funcionario[NumeroFuncionario] = empregado ;
-		NumeroFuncionario++;
-		
-		System.out.println(NumeroFuncionario);
-		for (int i = 0; i < funcionario.length; i++) {
-			System.out.println(funcionario[i]);
-		}
-		
-			
-	}
-
-	private static void testaVetorFunc() {
-		if (NumeroFuncionario >= funcionario.length){
-			Funcionario[] funcionarioNovo = new Funcionario [funcionario.length*2];
-			for(int i = 0; i<funcionario.length;i++ ){
-			funcionarioNovo[i] = funcionario[i];
-			System.out.println("fiz o vetor");
-			}
-			funcionario = funcionarioNovo;
-			}
-		
-		}
-	}
-	
-
+}

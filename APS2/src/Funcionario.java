@@ -6,12 +6,47 @@
 
 		private String nome;
 		private String[] competencias;
-		private double salario;
+		private String  salario;
+		private Integer num_competencias;
 
 	
-	public Funcionario(String nome, double salario) {
+	public Funcionario(String nome, String salario, Integer num_competencias, String[] competencias) {
+		setNome(nome);
+		setSalario(salario);
+		setCompetencias(getCompetencias());
+		setNum_competencias(num_competencias);
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String[] getCompetencias() {
+		return competencias;
+	}
+
+	public void setCompetencias(String[] competencias) {
+		this.competencias = competencias;
+	}
+
+	public String getSalario() {
+		return salario;
+	}
+
+	public void setSalario(String salario) {
 		this.salario = salario;
+	}
+
+	public Integer getNum_competencias() {
+		return num_competencias;
+	}
+
+	public void setNum_competencias(Integer num_competencias) {
+		this.num_competencias = num_competencias;
 	}
 
 	public void setCompetencias(int numFunc, String competencia) {
@@ -28,6 +63,25 @@
 		
 
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/*
 	

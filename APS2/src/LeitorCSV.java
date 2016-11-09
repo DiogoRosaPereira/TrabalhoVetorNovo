@@ -18,7 +18,7 @@ public class LeitorCSV {
 
 	private void testaRotas() throws FileNotFoundException {
 		Parser<Funcionario> parser = new FuncionarioParser(); 
-		CSVreader<Funcionario> reader = new CSVreader<>("Funcionarios.CSV", parser);
+		CSVReader<Funcionario> reader = new CSVReader<>("Funcionarios.CSV", parser);
 		reader.skipLine(); // cabecalho
 		while (reader.hasNext()) {
 			Funcionario route = reader.readObject();
@@ -29,7 +29,7 @@ public class LeitorCSV {
 
 	private void testaAlunos() throws FileNotFoundException {
 		Parser<Funcionario> parser = new FuncionarioParser(); 
-		CSVreader<Funcionario> reader = new CSVreader<>("Funcionarios.csv", parser);
+		CSVReader<Funcionario> reader = new CSVReader<>("Funcionarios.csv", parser);
 		while (reader.hasNext()) {
 			Funcionario empregado = reader.readObject();
 			System.out.println(empregado);

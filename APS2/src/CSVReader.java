@@ -3,11 +3,11 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
-public class CSVreader<T> {
+public class CSVReader<T> {
 	private Scanner arquivo;
 	private Parser<T> parser;
 
-	public CSVreader(String filename, Parser<T> parser)
+	public CSVReader(String filename, Parser<T> parser)
 			throws FileNotFoundException
 	{
 		this.arquivo =
@@ -17,7 +17,7 @@ public class CSVreader<T> {
 								)
 				);
 		this.parser = parser;
-		//arquivo.useDelimiter("[;\\r\\n]+");
+		
 	}
 
 	public boolean hasNext() {
