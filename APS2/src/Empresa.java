@@ -174,9 +174,9 @@ public class Empresa <T>{
 	private void adicionaCompetencia() {
 		listarCompetencia();
 		System.out.println("digite competencia:");
-		String comp = scanner.next();
+		String competencia = scanner.next();
 		
-		competencias.append(new Competencia(comp));
+		competencias.append(new Competencia(competencia));
 		
 		
 		listarCompetencia();
@@ -387,17 +387,18 @@ public class Empresa <T>{
 		String salario = funcionarios.get(index-1).getSalario();
 		int num_competencia = funcionarios.get(index-1).getNum_competencias();
 		
-		String []competencias = new String[num_competencia+1];
+		String []competencia = new String[num_competencia+1];
 		
-		System.out.print("Competencia ");
-		String comp = scanner.next();
-		competencias[num_competencia] = comp;
+		listarCompetencia();
+		System.out.print("Escolha competencia ");
+		int comp = scanner.nextInt();
+		competencia[num_competencia] = competencias.get(comp-1).getCompete();
 		
-		for (int i = 0; i < competencias.length-1; i++) {
-			competencias[i] = funcionarios.get(index-1).getCompetencias()[i];
+		for (int i = 0; i < competencia.length-1; i++) {
+			competencia[i] = funcionarios.get(index-1).getCompetencias()[i];
 		}
 			
-		Funcionario funcionario = new Funcionario(nome, salario, num_competencia+1, competencias);
+		Funcionario funcionario = new Funcionario(nome, salario, num_competencia+1, competencia);
 			
 		funcionarios.insert(index-1, funcionario);
 		funcionarios.remove(index);

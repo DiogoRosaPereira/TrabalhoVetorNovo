@@ -1,26 +1,24 @@
 
 public class Competencia {
-	private String competencias;
+	private String compete;
 	
-	public Competencia(String competencias) {
-		setCompetencias(competencias);
+	public Competencia(String competencia) {
+		setCompetencias(competencia);
 	}
 
-	public String getCompetencias() {
-		return competencias;
+	public String getCompete() {
+		return compete;
 	}
 
-	public void setCompetencias(String competencias) {
-		this.competencias = competencias;
+	public void setCompetencias(String competencia) {
+		this.compete = competencia;
 	}
 
 	public void mostrarInformacoes(int index, int offset) {
-		String competencias = "";
-		
 		System.out.println(
 			(index + offset) + 
 			", Competências: " +
-			getCompetencias()
+			getCompete()
 		);
 	}
 }	
