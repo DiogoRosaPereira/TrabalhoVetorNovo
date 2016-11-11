@@ -1,20 +1,15 @@
-
+public class Funcionario<T> {
 	
-	import java.util.Arrays;
-
-	public class Funcionario {
-
-		private String nome;
-		private String[] competencias;
-		private String  salario;
-		private Integer num_competencias;
-
+	private String nome;
+	private String salario;
+	private Integer num_competencias;
+	private String[] competencias;
 	
 	public Funcionario(String nome, String salario, Integer num_competencias, String[] competencias) {
 		setNome(nome);
 		setSalario(salario);
-		setCompetencias(getCompetencias());
 		setNum_competencias(num_competencias);
+		setCompetencias(competencias);
 	}
 
 	public String getNome() {
@@ -23,14 +18,6 @@
 
 	public void setNome(String nome) {
 		this.nome = nome;
-	}
-
-	public String[] getCompetencias() {
-		return competencias;
-	}
-
-	public void setCompetencias(String[] competencias) {
-		this.competencias = competencias;
 	}
 
 	public String getSalario() {
@@ -49,93 +36,39 @@
 		this.num_competencias = num_competencias;
 	}
 
-	public void setCompetencias(int numFunc, String competencia) {
-		if (numFunc < 0 || numFunc >= competencias.length)
-			throw new ArrayIndexOutOfBoundsException(numFunc);
-			this.competencias[numFunc] = competencia;
-		}	
-	
+	public String[] getCompetencias() {
+		return competencias;
+	}
 
-		public String toString() {
-			return "Funcionario = " + nome + "\n salario=" + salario + "\n presencas=" + Arrays.toString(competencias) ;
-		}
-
-		
-
+	public void setCompetencias(String[] competencias) {
+		this.competencias = competencias;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	
-	
-	private int ind = 0 ;
-
-
-	public String getListaCompetencias() {
-		String func = "";
-		for (int i = 0; i < competencia.length; i++) {
-			if(competencia[i] != null)
-				func += competencia[i]+", ";
-		}
-		return func;
-	}
-	
-	public void setCompetencia(String compFunc) {
-		testarVetorCompetencia();
-		competencia[ind] = compFunc;
-		ind++;
+	public void mostrarInformacoes(int index, int offset) {
+		String competencias = "";
 		
-	}
-		
-	
-	private void testarVetorCompetencia() {
-		if(ind >= competencia.length-1){
-		String [] competenciaNovoNovo = new String [competencia.length+4];
-		for(int i = 0; i<competencia.length;i++ ){
-			competenciaNovoNovo[i] = competencia[i];
+		for (int i = 0; i < getNum_competencias(); i++) {
+			competencias += getCompetencias()[i];
+			
+			if(i == getNum_competencias() - 1) {
+				competencias += ".";
+			} else {
+				competencias += ", ";
 			}
-		competencia = competenciaNovoNovo;
 		}
+		
+		System.out.println(
+			(index + offset) + 
+			" - Nome: " + 
+			this.getNome() + 
+			", Salário: R$" + 
+			this.getSalario() +
+			", Número de competências: " +
+			this.getNum_competencias() +
+			", Competências: " +
+			competencias
+		);
 	}
-	
-
-	public String getNome() {
-		return nome;
-	}
-	public  void setNome(String nomeFunc) {
-		nome = nomeFunc;
-	}
-	public double getSalario() {
-		return salario;
-	}
-	public  void setSalario(double salarioFunc) {
-		salario = salarioFunc;
-	}
-	public String toString(){
-		return "nome  "+getNome()+
-				"\nSalario  "+getSalario()+
-				"\nCompetencia  "+getListaCompetencias();
-	}
-	
-	
-}*/
+}
 
 	

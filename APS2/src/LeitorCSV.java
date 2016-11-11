@@ -1,7 +1,14 @@
 import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class LeitorCSV {
-
+	
+	static Scanner scanner = new Scanner(System.in);
+	
+	private Vetor<Funcionario> funcionarios = new Vetor<>();
+	private Vetor<Projeto> projetos = new Vetor<>();
+	private Vetor<Competencia> competencias = new Vetor<>();
+	
 	public static void main(String[] args) {
 		try {
 			(new LeitorCSV()).run();
@@ -12,29 +19,43 @@ public class LeitorCSV {
 	}
 
 	private void run() throws FileNotFoundException {
-		testaAlunos();
-		testaRotas();
+		leituraDeFuncionarios();
+		leituraDeProjetos();
 	}
 
-	private void testaRotas() throws FileNotFoundException {
-		Parser<Funcionario> parser = new FuncionarioParser(); 
-		CSVReader<Funcionario> reader = new CSVReader<>("Funcionarios.CSV", parser);
-		reader.skipLine(); // cabecalho
-		while (reader.hasNext()) {
-			Funcionario route = reader.readObject();
-			System.out.println(route);
-		}
-		reader.close();
+	private void leituraDeFuncionarios() throws FileNotFoundException {
+		CSVReader<Funcionario> arquivo = new CSVReader<>("funcionarios.csv", new FuncionarioParser());
+		
+		arquivo.skipLine();
+		
+		while (arquivo.hasNext()) {
+			funcionarios.append(arquivo.readObject());
+		}		
+		
+		arquivo.close();
+	}
+	private void leituraDeCompetencias() throws FileNotFoundException {
+		CSVReader<Competencia> arquivo = new CSVReader<>("competencias.csv", new CompetenciaParser());
+		
+		arquivo.skipLine();
+		
+		while (arquivo.hasNext()) {
+			competencias.append(arquivo.readObject());
+		}		
+		
+		arquivo.close();
 	}
 
-	private void testaAlunos() throws FileNotFoundException {
-		Parser<Funcionario> parser = new FuncionarioParser(); 
-		CSVReader<Funcionario> reader = new CSVReader<>("Funcionarios.csv", parser);
-		while (reader.hasNext()) {
-			Funcionario empregado = reader.readObject();
-			System.out.println(empregado);
+	private void leituraDeProjetos() throws FileNotFoundException {
+		CSVReader<Projeto> arquivo = new CSVReader<>("projetos.csv", new ProjetoParser());
+		
+		arquivo.skipLine();
+
+		while (arquivo.hasNext()) {
+			projetos.append(arquivo.readObject());
 		}
-		reader.close();
+		
+		arquivo.close();
 	}
 
 }
